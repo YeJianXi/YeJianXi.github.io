@@ -1,0 +1,84 @@
+<html>
+
+<head>
+    <style>
+         *{
+            list-style: none;
+         }
+    </style>
+
+</head>
+
+<body>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        var data = [
+            { id: 1, pid: 0, name: "1.文章管理", sort: 1 },
+            { id: 2, pid: 0, name: "2.直播管理", sort: 2 },
+            { id: 3, pid: 1, name: "1.1文章列表", sort: 1 },
+            { id: 4, pid: 1, name: "1.2文章抓取", sort: 2 },
+            { id: 5, pid: 3, name: "1.1.1讲师管理", sort: 1 },
+        ];
+        DrawTreeNode($('body'), getParents());
+
+        function DrawTreeNode(parentNode, items) {
+
+            for (var i = 0; i < items.length; i++) {
+                item = items[i];
+                var ul = $("<ul></ul>");
+                ul.attr('id', item.id);
+                var nameli = $('<li></li>').text(item.name);
+                ul.append(nameli);
+                var childNods = WhereChild(item);
+                if (childNods && childNods.length > 0) {
+                    var subli = $('<li></li>');
+                    DrawTreeNode(subli, childNods);
+                    ul.append(subli);
+                }
+                parentNode.append(ul);
+            }
+
+
+        }
+        function NodeFloor(node, excuteCount) {
+            excuteCount++;
+            if (node.pid == 0) {
+                return excuteCount;
+            } else {
+                node = SearchNode(node.pid);
+                return NodeFloor(node, excuteCount);
+            }
+
+        }
+
+        function SearchNode(id) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].id == id) {
+                    return data[i];
+                }
+            }
+            return null;
+        }
+        function WhereChild(node) {
+            var childNode = [];
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].pid == node.id) {
+                    childNode.push(data[i]);
+                }
+            }
+            return childNode;
+        }
+        function getParents() {
+            var parents = [];
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].pid == 0) {
+                    parents.push(data[i]);
+                }
+            }
+            return parents;
+        }
+
+    </script>
+</body>
+
+</html>
