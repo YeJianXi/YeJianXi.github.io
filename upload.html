@@ -13,7 +13,8 @@
 
 </body>
 <script>
-    $(function(){
+    $(function(){ 
+        
         $('input[name="img"]').change(function(){
             var formData = new FormData();
             formData.append('file', this.files[0]);  //添加图片信息的参数
